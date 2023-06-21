@@ -1,23 +1,23 @@
 import { Pool } from 'pg';
-require('dotenv').config();
+import dotenv from 'dotenv';
 
-const databaseUser = process.env.DATABASE_USER;
-const databasePassword = process.env.DATABASE_PASSWORD;
+dotenv.config();
 
+const { DATABASE_USER, DATABASE_PASSWORD } = process.env;
 
 // Create a connection pool to the PostgreSQL database
 export const pool = new Pool({
-    user: databaseUser,
-    host: 'localhost',
-    database: 'postgres',
-    password: databasePassword,
-    port: 5432, // or the port where PostgreSQL is running
-  });
-  
+  user: DATABASE_USER,
+  host: 'localhost',
+  database: 'postgres',
+  password: DATABASE_PASSWORD,
+  port: 5432, // or the port where PostgreSQL is running
+});
 
 // Function to create the 'todos' table
 export async function createTodosTable(): Promise<void> {
   const client = await pool.connect();
+  
   try {
     await client.query(`
       CREATE TABLE IF NOT EXISTS todos (
@@ -27,6 +27,7 @@ export async function createTodosTable(): Promise<void> {
         done BOOLEAN DEFAULT FALSE
       )
     `);
+    
     console.log('Database connection established');
   } catch (error) {
     console.error('Error creating "todos" table:', error);
