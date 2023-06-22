@@ -1,4 +1,4 @@
-# Todo App
+# Todo API with Typescript and PostgreSQL
 
 A simple Todo App built with Node.js and PostgreSQL.
 
