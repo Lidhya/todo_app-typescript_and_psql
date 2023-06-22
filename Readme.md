@@ -4,10 +4,11 @@ A simple Todo App built with Node.js and PostgreSQL.
 
 ## Getting Started
 
-### Prerequisites
+### Environment Variables
+Make sure to set the following environment variables before running the application:
 
-- Node.js (version >= `14`)
-- PostgreSQL (version >= `9`)
+`DATABASE_USER`: PostgreSQL database user.
+`DATABASE_PASSWORD`: PostgreSQL database password.
 
 ### Installation
 
@@ -38,8 +39,3 @@ The application should now be running on `http://localhost:3000`.
 
 - Delete a Todo: Send a DELETE request to `/todos` endpoint with `id` as query, where `id` is the ID of the Todo to be deleted.
 
-### Environment Variables
-Make sure to set the following environment variables before running the application:
-
-`DATABASE_USER`: PostgreSQL database user.
-`DATABASE_PASSWORD`: PostgreSQL database password.
