@@ -15,18 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const config_1 = require("./config");
-// import { Pool } from 'pg';
 const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.send("Hi there! Welcome to Todo Api!");
-    }
-    catch (error) {
-        console.error('Error retrieving todos', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-}));
+// Welcome message
+app.get('/', (req, res) => {
+    res.send('Hi there! Welcome to Todo Api!');
+});
 // Retrieve the list of todos
 app.get('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -44,16 +38,14 @@ app.get('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 // Add a new todo
 app.post('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title, description } = req.body;
-    // Check if title is provided
     if (!title || !description) {
-        return res.status(400).json({ error: 'Title and description is required' });
+        return res.status(400).json({ error: 'Title and description are required' });
     }
     try {
         const client = yield config_1.pool.connect();
-        client.query('INSERT INTO todos (title, description) VALUES ($1, $2)', [title, description]).then(() => {
-            client.release();
-            res.sendStatus(201);
-        }).catch((error) => { res.status(500).json({ error }); });
+        yield client.query('INSERT INTO todos (title, description) VALUES ($1, $2)', [title, description]);
+        client.release();
+        res.sendStatus(201);
     }
     catch (error) {
         console.error('Error adding todo', error);
@@ -63,7 +55,6 @@ app.post('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 // Delete a todo
 app.delete('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.query;
-    // Check if id is provided
     if (!id) {
         return res.status(400).json({ error: 'Todo ID is required' });
     }
@@ -81,7 +72,6 @@ app.delete('/todos', (req, res) => __awaiter(void 0, void 0, void 0, function* (
 // Mark a todo as done
 app.patch('/todos/done', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.query;
-    // Check if id is provided
     if (!id) {
         return res.status(400).json({ error: 'Todo ID is required' });
     }
@@ -99,7 +89,6 @@ app.patch('/todos/done', (req, res) => __awaiter(void 0, void 0, void 0, functio
 // Start the server
 (0, config_1.createTodosTable)()
     .then(() => {
-    // Start the server
     const port = 3000;
     app.listen(port, () => {
         console.log(`Server is running on port ${port}`);

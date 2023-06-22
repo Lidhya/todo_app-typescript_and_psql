@@ -8,18 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTodosTable = exports.pool = void 0;
 const pg_1 = require("pg");
-require('dotenv').config();
-const databaseUser = process.env.DATABASE_USER;
-const databasePassword = process.env.DATABASE_PASSWORD;
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const { DATABASE_USER, DATABASE_PASSWORD } = process.env;
 // Create a connection pool to the PostgreSQL database
 exports.pool = new pg_1.Pool({
-    user: databaseUser,
+    user: DATABASE_USER,
     host: 'localhost',
     database: 'postgres',
-    password: databasePassword,
+    password: DATABASE_PASSWORD,
     port: 5432, // or the port where PostgreSQL is running
 });
 // Function to create the 'todos' table
